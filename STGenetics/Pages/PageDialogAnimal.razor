@@ -1,0 +1,121 @@
+﻿
+@using STGenetics.Data.Repositories
+@using STGenetics.Services
+@inject IAnimalService AnimalService
+@inject IDialogService DialogService
+<MudDialog>
+        <TitleContent>
+            Add Animal
+        </TitleContent>
+        <DialogContent>
+            <EditForm Model="@Animal">
+                <div class="Card">
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="">Name</label>
+                            <InputText class="form-control" @bind-Value="@Animal.Name"></InputText>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="">Breed</label>
+                            
+                            <InputSelect @bind-Value="@Animal.Breed" class="form-control btn-sm" >
+                                @foreach (var itemBreed in listBreed)
+                                {
+                                <option value="@itemBreed">@itemBreed</option>
+                                }
+                            </InputSelect>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="">BirthDate</label>
+                            <InputDate class="form-control" @bind-Value="@Animal.BirthDate"></InputDate>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="">Sex</label>
+                            <InputSelect  @bind-Value="@Animal.Sex" class="form-control btn-sm" >
+                                @foreach (var itemSex in listSex)
+                                {
+                                <option value="@itemSex">@itemSex</option>
+                                }
+                            </InputSelect>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="">Price</label>
+                        <MudNumericField  @bind-Value="@Animal.Price" Variant="Variant.Outlined"></MudNumericField>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="">Status</label>
+                        <InputCheckbox @bind-Value="@Animal.Status"></InputCheckbox>
+                    </div>
+                    
+
+                </div>
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel">Cancel</MudButton>
+            <MudButton Color="Color.Primary" OnClick="AddAnimal">Add</MudButton>
+        </DialogActions>
+    </MudDialog>
+@code {
+
+    public Animal Animal = new Animal()
+    {
+        BirthDate = DateTime.Today,
+        Status = false
+
+    };
+    public List<Sex> listSex = new List<Sex>();
+    public List<Breed> listBreed = new List<Breed>();
+    [Parameter] public int AnimalIdUpdate { get; set; }
+
+    public string Message { get; set; }
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            listSex = await AnimalService.GetAllSex();
+            listBreed = await AnimalService.GetAllBreed();
+
+            if(listSex.Count > 0)
+            {
+                Animal.Sex = listSex.FirstOrDefault().ToString();
+            }
+
+            if(listBreed.Count > 0)
+            {
+                Animal.Breed = listBreed.FirstOrDefault().ToString();
+            }
+
+            if(AnimalIdUpdate !=  0)
+            {
+                Animal = await AnimalService.GetAllAnimalsById(AnimalIdUpdate);
+                var accion = "";
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Message = "Something went wrong... " + ex.Message;
+        }
+    }
+
+    protected async Task AddAnimal()
+    {
+        MudDialog.Close(DialogResult.Ok(Animal));
+    }
+
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+}

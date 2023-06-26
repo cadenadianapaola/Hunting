@@ -1,0 +1,12 @@
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics.Models\bin\Debug\net6.0\STGenetics.Models.deps.json
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics.Models\bin\Debug\net6.0\STGenetics.Models.dll
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics.Models\bin\Debug\net6.0\STGenetics.Models.pdb
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics.Models\obj\Debug\net6.0\STGenetics.Models.csproj.AssemblyReference.cache
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics.Models\obj\Debug\net6.0\STGenetics.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics.Models\obj\Debug\net6.0\STGenetics.Models.AssemblyInfoInputs.cache
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics.Models\obj\Debug\net6.0\STGenetics.Models.AssemblyInfo.cs
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics.Models\obj\Debug\net6.0\STGenetics.Models.csproj.CoreCompileInputs.cache
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics.Models\obj\Debug\net6.0\STGenetics.Models.dll
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics.Models\obj\Debug\net6.0\refint\STGenetics.Models.dll
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics.Models\obj\Debug\net6.0\STGenetics.Models.pdb
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics.Models\obj\Debug\net6.0\ref\STGenetics.Models.dll

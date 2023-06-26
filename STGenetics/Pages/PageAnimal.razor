@@ -1,0 +1,279 @@
+﻿@page "/PageAnimal"
+@using STGenetics.Data.Repositories
+@using STGenetics.Services
+@using static MudBlazor.CategoryTypes
+@inject IAnimalService AnimalService
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+
+<p>@Message</p>
+
+@if (listSex.Count() == 0 || listBreed.Count() == 0 || ElementsDTO.Count == 0)
+{
+    <img src="https://codigofuente.io/wp-content/uploads/2018/09/progress.gif" />
+}
+else
+{
+    <EditForm Model="@Animal">
+        <div class="card">
+            <h5 class="card-header">Filter Details</h5>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="">Name</label>
+                            <InputText class="form-control" @bind-Value="@Animal.Name"></InputText>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="">Breed</label>
+                            <InputSelect @bind-Value="@Animal.Breed" class="form-control btn-sm">
+                                <option value="0">--Select--</option>
+                                @foreach (var itemBreed in listBreed)
+                                {
+                                <option value="@itemBreed">@itemBreed</option>
+                                }
+                        </InputSelect>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="">BirthDate</label>
+                        <InputDate class="form-control" @bind-Value="@Animal.BirthDate"></InputDate>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="">Sex</label>
+                        <InputSelect @bind-Value="@Animal.Sex" class="form-control btn-sm">
+                            <option value="0" selected="selected">--Select--</option>
+                            @foreach (var item in listSex)
+                                {
+                                <option value="@item">@item</option>
+                                }
+                        </InputSelect>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="">Price</label>
+                        <MudNumericField @bind-Value="@Animal.Price" Variant="Variant.Outlined"></MudNumericField>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="">Status</label>
+                        <InputCheckbox @bind-Value="@Animal.Status"></InputCheckbox>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <input type="submit" class="btn btn-success btn-sm" value="Filter" @onclick="FilterAnimal">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mb-3">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mb-3" style="text-align:right">
+            <button type="button" class="btn btn-info btn-sm" style="color:white;" @onclick="AddAnimal">Add Row</button>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mb-3" style="text-align:right">
+
+            <MudTable Items="ElementsDTO" Hover="true" Breakpoint="Breakpoint.Sm">
+
+                <HeaderContent>
+                    <MudTh>Sale</MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<AnimalDTO, object>(x=>x.AnimalId)">Id</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<AnimalDTO, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<AnimalDTO, object>(x=>x.Breed)">Breed</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<AnimalDTO, object>(x=>x.BirthDate)">BirthDate</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<AnimalDTO, object>(x=>x.Sex)">Sex</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<AnimalDTO, object>(x=>x.Price)">Price</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<AnimalDTO, object>(x=>x.Status)">Status</MudTableSortLabel></MudTh>
+
+                    <MudTh></MudTh>
+                    <MudTh></MudTh>
+
+                </HeaderContent>
+                <RowTemplate Context="AnimalsContext">
+                    <MudTd DataLabel="Enabled">
+                        <MudCheckBox T="bool" CheckedChanged="@(e => selectRecord(AnimalsContext, e))"></MudCheckBox>
+
+                    </MudTd>
+                    <MudTd DataLabel="AnimalId">@AnimalsContext.AnimalId</MudTd>
+                    <MudTd DataLabel="Name">@AnimalsContext.Name</MudTd>
+                    <MudTd DataLabel="Breed">@AnimalsContext.Breed</MudTd>
+                    <MudTd DataLabel="BirthDate">@AnimalsContext.BirthDate</MudTd>
+                    <MudTd DataLabel="Sex">@AnimalsContext.Sex</MudTd>
+                    <MudTd DataLabel="Price">@AnimalsContext.Price</MudTd>
+                    <MudTd DataLabel="Status">@AnimalsContext.Status</MudTd>
+                    <MudTd DataLabel="">
+                        <MudFab OnClick="@(() => Edit(AnimalsContext.AnimalId))"
+                                Color="Color.Primary"
+                                Icon="@Icons.Material.Filled.Update"
+                                Size="Size.Small"
+                                IconSize="Size.Small"></MudFab>
+                    </MudTd>
+                    <MudTd DataLabel="">
+                        <MudFab OnClick="@(() => deleteAnimal(AnimalsContext.AnimalId))"
+                                Color="Color.Secondary"
+                                Icon="@Icons.Material.Filled.Delete"
+                                Size="Size.Small"
+                                IconSize="Size.Small"></MudFab>
+                    </MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager PageSizeOptions="new int[] { 10, int.MaxValue }" InfoFormat="@($"Left {infoFormat}")" HorizontalAlignment="HorizontalAlignment.Left" HidePageNumber="@hidePageNumber" HidePagination="@hidePagination" HideRowsPerPage="@hideRowsPerPage" />
+                </PagerContent>
+            </MudTable>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mb-3">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <MudTable Items="resumaryDetailsLoad" Hover="true" Breakpoint="Breakpoint.Sm">
+                <ToolBarContent>
+                    <MudText Type="Typo.h6">Detail</MudText>
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>Breed</MudTh>
+                    <MudTh>Price</MudTh>
+                    <MudTh>Percent</MudTh>
+                    <MudTh>Discunt</MudTh>
+                </HeaderContent>
+                <RowTemplate Context="DetailContext">
+                    <MudTd DataLabel="Id">@DetailContext.Breed (@DetailContext.Row)</MudTd>
+                    <MudTd DataLabel="Name">@DetailContext.FullSale</MudTd>
+                    <MudTd DataLabel="Name">@DetailContext.Percent</MudTd>
+                    <MudTd DataLabel="Name">@DetailContext.Discunt</MudTd>
+                </RowTemplate>
+            </MudTable>
+        </div>
+    </div>
+
+</EditForm>
+
+}
+
+@code {
+
+
+    private bool hidePageNumber;
+    private bool hidePagination;
+    private bool hideRowsPerPage;
+    private string infoFormat = "{first_item}-{last_item} of {all_items}";
+    public Animal Animal = new Animal()
+        {
+            BirthDate = DateTime.Today,
+            Status = false
+
+        };
+
+    public DetailSale DetailSale = new DetailSale();
+
+    public List<DetailSale> resumaryDetails = new List<DetailSale>();
+    public List<DetailSale> resumaryDetailsLoad = new List<DetailSale>();
+    public List<DetailSale> resumaryDetailsIteration = new List<DetailSale>();
+    List<string> listDetailsSail = new List<string>();
+
+    public List<AnimalDTO> ElementsDTO = new List<AnimalDTO>();
+    public List<Sex> listSex = new List<Sex>();
+    public List<Breed> listBreed = new List<Breed>();
+    public string Message { get; set; }
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            listSex = await AnimalService.GetAllSex();
+            listBreed = await AnimalService.GetAllBreed();
+
+            ElementsDTO = await AnimalService.GetAllAnimals();
+
+
+            if (listSex.Count > 0)
+            {
+                Animal.Sex = listSex.FirstOrDefault().ToString();
+            }
+
+            if (listBreed.Count > 0)
+            {
+                Animal.Breed = listBreed.FirstOrDefault().ToString();
+            }
+        }
+        catch (Exception ex)
+        {
+            Message = "Something went wrong... " + ex.Message;
+        }
+    }
+
+    protected async Task AddAnimal()
+    {
+        var parameters = new DialogParameters { { "AnimalIdUpdate", 0 } };
+        var dialog = DialogService.Show<PageDialogAnimal>("Add Animal", parameters);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            var animalDL = (Animal)result.Data;
+            await AnimalService.SaveAnimal(animalDL);
+            ElementsDTO = await AnimalService.GetAllAnimals();
+        }
+    }
+
+    protected async Task FilterAnimal()
+    {
+        ElementsDTO = await AnimalService.GetFilterAnimal(Animal.Name, Animal.Breed, Animal.BirthDate.ToString(), Animal.Sex, Animal.Price);
+
+
+    }
+
+    protected async Task deleteAnimal(int id)
+    {
+        await AnimalService.DeleteAnimal(id);
+        ElementsDTO.RemoveAll(p => p.AnimalId == id);
+    }
+
+    protected async Task Edit(int id)
+    {
+
+
+        var parameters = new DialogParameters { { "AnimalIdUpdate", id } };
+
+        var dialog = DialogService.Show<PageDialogAnimal>("Update Animal", parameters);
+
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            var animalDL = (Animal)result.Data;
+            await AnimalService.SaveAnimal(animalDL);
+            ElementsDTO = await AnimalService.GetAllAnimals();
+        }
+    }
+
+    private async Task selectRecord(AnimalDTO record, bool ischecked)
+    {
+
+
+        if (ischecked)
+        {
+            listDetailsSail.Add(record.AnimalId.ToString());
+        }
+        else
+        {
+            listDetailsSail.Remove(record.AnimalId.ToString());
+        }
+
+
+        string strResumaryDetails = String.Join(',', listDetailsSail);
+
+        resumaryDetailsLoad = await AnimalService.GetSalesAnimals(strResumaryDetails);
+
+
+    }
+}

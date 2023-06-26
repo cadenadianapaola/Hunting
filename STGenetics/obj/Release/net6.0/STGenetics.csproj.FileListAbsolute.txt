@@ -1,0 +1,6 @@
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics\obj\Release\net6.0\STGenetics.csproj.AssemblyReference.cache
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics\obj\Release\net6.0\STGenetics.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics\obj\Release\net6.0\STGenetics.AssemblyInfoInputs.cache
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics\obj\Release\net6.0\STGenetics.AssemblyInfo.cs
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics\obj\Release\net6.0\STGenetics.csproj.CoreCompileInputs.cache
+C:\Users\diana.cadena\source\Blazor\STGenetics\STGenetics\obj\Release\net6.0\STGenetics.MvcApplicationPartsAssemblyInfo.cache
